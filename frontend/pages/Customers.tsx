@@ -11,7 +11,7 @@ import { useBackend } from "../hooks/useBackend";
 
 export default function Customers() {
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>("all");
   const [page, setPage] = useState(1);
   const limit = 10;
   
@@ -21,7 +21,7 @@ export default function Customers() {
     queryKey: ["customers", { search, status, page, limit }],
     queryFn: () => backend.proxy.listCustomers({
       search: search || undefined,
-      status: status as any || undefined,
+      status: status === "all" ? undefined : status as any,
       page,
       limit,
     }),
@@ -65,7 +65,7 @@ export default function Customers() {
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Statuses</SelectItem>
+                <SelectItem value="all">All Statuses</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
                 <SelectItem value="inactive">Inactive</SelectItem>
                 <SelectItem value="suspended">Suspended</SelectItem>

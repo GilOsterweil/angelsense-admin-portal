@@ -10,9 +10,9 @@ import { Search, Eye, Clock } from "lucide-react";
 import { useBackend } from "../hooks/useBackend";
 
 export default function Tickets() {
-  const [status, setStatus] = useState<string>("");
-  const [priority, setPriority] = useState<string>("");
-  const [category, setCategory] = useState<string>("");
+  const [status, setStatus] = useState<string>("all");
+  const [priority, setPriority] = useState<string>("all");
+  const [category, setCategory] = useState<string>("all");
   const [page, setPage] = useState(1);
   const limit = 10;
   
@@ -21,9 +21,9 @@ export default function Tickets() {
   const { data, isLoading } = useQuery({
     queryKey: ["tickets", { status, priority, category, page, limit }],
     queryFn: () => backend.proxy.listTickets({
-      status: status as any || undefined,
-      priority: priority as any || undefined,
-      category: category as any || undefined,
+      status: status === "all" ? undefined : status as any,
+      priority: priority === "all" ? undefined : priority as any,
+      category: category === "all" ? undefined : category as any,
       page,
       limit,
     }),
@@ -75,7 +75,7 @@ export default function Tickets() {
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Statuses</SelectItem>
+                <SelectItem value="all">All Statuses</SelectItem>
                 <SelectItem value="open">Open</SelectItem>
                 <SelectItem value="in-progress">In Progress</SelectItem>
                 <SelectItem value="resolved">Resolved</SelectItem>
@@ -88,7 +88,7 @@ export default function Tickets() {
                 <SelectValue placeholder="Filter by priority" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Priorities</SelectItem>
+                <SelectItem value="all">All Priorities</SelectItem>
                 <SelectItem value="urgent">Urgent</SelectItem>
                 <SelectItem value="high">High</SelectItem>
                 <SelectItem value="medium">Medium</SelectItem>
@@ -101,7 +101,7 @@ export default function Tickets() {
                 <SelectValue placeholder="Filter by category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="technical">Technical</SelectItem>
                 <SelectItem value="billing">Billing</SelectItem>
                 <SelectItem value="general">General</SelectItem>

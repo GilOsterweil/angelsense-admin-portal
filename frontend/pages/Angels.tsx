@@ -8,7 +8,7 @@ import { Search, Eye, Heart, MapPin, Calendar } from "lucide-react";
 
 export default function Angels() {
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>("all");
 
   // Mock data for angels
   const angels = [
@@ -90,7 +90,7 @@ export default function Angels() {
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Statuses</SelectItem>
+                <SelectItem value="all">All Statuses</SelectItem>
                 <SelectItem value="safe">Safe</SelectItem>
                 <SelectItem value="alert">Alert</SelectItem>
                 <SelectItem value="emergency">Emergency</SelectItem>

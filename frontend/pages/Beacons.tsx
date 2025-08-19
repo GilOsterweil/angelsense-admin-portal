@@ -8,7 +8,7 @@ import { Search, Eye, Bluetooth, MapPin, Battery, Calendar } from "lucide-react"
 
 export default function Beacons() {
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>("all");
 
   // Mock data for beacons
   const beacons = [
@@ -115,7 +115,7 @@ export default function Beacons() {
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Statuses</SelectItem>
+                <SelectItem value="all">All Statuses</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
                 <SelectItem value="low_battery">Low Battery</SelectItem>
                 <SelectItem value="offline">Offline</SelectItem>

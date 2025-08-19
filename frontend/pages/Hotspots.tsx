@@ -8,7 +8,7 @@ import { Search, Eye, Wifi, MapPin, Users } from "lucide-react";
 
 export default function Hotspots() {
   const [search, setSearch] = useState("");
-  const [type, setType] = useState<string>("");
+  const [type, setType] = useState<string>("all");
 
   // Mock data for hotspots
   const hotspots = [
@@ -111,7 +111,7 @@ export default function Hotspots() {
                 <SelectValue placeholder="Filter by type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Types</SelectItem>
+                <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="school">School</SelectItem>
                 <SelectItem value="playground">Playground</SelectItem>
                 <SelectItem value="library">Library</SelectItem>

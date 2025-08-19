@@ -18,7 +18,7 @@ export default function TicketDetail() {
   
   const [status, setStatus] = useState<string>("");
   const [priority, setPriority] = useState<string>("");
-  const [assignedTo, setAssignedTo] = useState<string>("");
+  const [assignedTo, setAssignedTo] = useState<string>("unassigned");
 
   const { data: ticket, isLoading } = useQuery({
     queryKey: ["ticket", id],
@@ -27,7 +27,7 @@ export default function TicketDetail() {
     onSuccess: (data) => {
       setStatus(data.status);
       setPriority(data.priority);
-      setAssignedTo(data.assignedTo || "");
+      setAssignedTo(data.assignedTo || "unassigned");
     },
   });
 
@@ -56,7 +56,9 @@ export default function TicketDetail() {
     const updateData: any = {};
     if (status !== ticket?.status) updateData.status = status;
     if (priority !== ticket?.priority) updateData.priority = priority;
-    if (assignedTo !== (ticket?.assignedTo || "")) updateData.assignedTo = assignedTo;
+    if (assignedTo !== (ticket?.assignedTo || "unassigned")) {
+      updateData.assignedTo = assignedTo === "unassigned" ? undefined : assignedTo;
+    }
 
     if (Object.keys(updateData).length > 0) {
       updateMutation.mutate(updateData);
@@ -253,7 +255,7 @@ export default function TicketDetail() {
                     <SelectValue placeholder="Select assignee" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Unassigned</SelectItem>
+                    <SelectItem value="unassigned">Unassigned</SelectItem>
                     <SelectItem value="John Smith">John Smith</SelectItem>
                     <SelectItem value="Sarah Johnson">Sarah Johnson</SelectItem>
                     <SelectItem value="Mike Davis">Mike Davis</SelectItem>
