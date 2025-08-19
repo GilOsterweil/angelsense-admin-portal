@@ -3,8 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { 
   Users, 
-  Ticket, 
-  Smartphone, 
+  MapPin, 
+  Shield, 
+  Heart, 
+  Wifi, 
+  Bluetooth, 
   BarChart3, 
   Menu,
   User,
@@ -23,9 +26,11 @@ interface LayoutProps {
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: BarChart3 },
-  { name: "Customers", href: "/customers", icon: Users },
-  { name: "Support Tickets", href: "/tickets", icon: Ticket },
-  { name: "Devices", href: "/devices", icon: Smartphone },
+  { name: "GPS Device Trackers", href: "/gps-trackers", icon: MapPin },
+  { name: "Guardians", href: "/guardians", icon: Shield },
+  { name: "Angels", href: "/angels", icon: Heart },
+  { name: "Hotspots", href: "/hotspots", icon: Wifi },
+  { name: "Beacons", href: "/beacons", icon: Bluetooth },
 ];
 
 const AngelSenseLogo = () => (

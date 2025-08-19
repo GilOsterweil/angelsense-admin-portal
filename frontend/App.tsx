@@ -6,11 +6,11 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Customers from "./pages/Customers";
-import CustomerDetail from "./pages/CustomerDetail";
-import Tickets from "./pages/Tickets";
-import TicketDetail from "./pages/TicketDetail";
-import Devices from "./pages/Devices";
+import GPSTrackers from "./pages/GPSTrackers";
+import Guardians from "./pages/Guardians";
+import Angels from "./pages/Angels";
+import Hotspots from "./pages/Hotspots";
+import Beacons from "./pages/Beacons";
 
 const queryClient = new QueryClient();
 
@@ -26,11 +26,11 @@ export default function App() {
                 <Layout>
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
-                    <Route path="/customers" element={<Customers />} />
-                    <Route path="/customers/:id" element={<CustomerDetail />} />
-                    <Route path="/tickets" element={<Tickets />} />
-                    <Route path="/tickets/:id" element={<TicketDetail />} />
-                    <Route path="/devices" element={<Devices />} />
+                    <Route path="/gps-trackers" element={<GPSTrackers />} />
+                    <Route path="/guardians" element={<Guardians />} />
+                    <Route path="/angels" element={<Angels />} />
+                    <Route path="/hotspots" element={<Hotspots />} />
+                    <Route path="/beacons" element={<Beacons />} />
                   </Routes>
                 </Layout>
               </ProtectedRoute>
