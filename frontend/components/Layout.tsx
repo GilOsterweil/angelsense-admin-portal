@@ -7,7 +7,6 @@ import {
   Smartphone, 
   BarChart3, 
   Menu,
-  Heart,
   User,
   LogOut,
   Settings
@@ -28,6 +27,15 @@ const navigation = [
   { name: "Support Tickets", href: "/tickets", icon: Ticket },
   { name: "Devices", href: "/devices", icon: Smartphone },
 ];
+
+const AngelSenseLogo = () => (
+  <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50 10C35 10 25 25 25 40C25 55 35 70 50 70C65 70 75 55 75 40C75 25 65 10 50 10Z" fill="#4ECDC4"/>
+    <circle cx="50" cy="35" r="8" fill="white"/>
+    <path d="M42 45C42 45 46 50 50 50C54 50 58 45 58 45" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+    <path d="M30 75L50 85L70 75" stroke="#4ECDC4" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
@@ -108,7 +116,7 @@ export default function Layout({ children }: LayoutProps) {
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4 shadow-sm">
           <div className="flex h-16 shrink-0 items-center gap-2">
-            <Heart className="h-8 w-8 text-blue-600" />
+            <AngelSenseLogo />
             <span className="text-xl font-bold text-gray-900">AngelSense</span>
             <span className="text-sm text-gray-500 ml-1">Admin</span>
           </div>
@@ -152,7 +160,7 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent side="left" className="w-72">
             <div className="flex items-center gap-2 mb-6">
-              <Heart className="h-8 w-8 text-blue-600" />
+              <AngelSenseLogo />
               <span className="text-xl font-bold text-gray-900">AngelSense</span>
               <span className="text-sm text-gray-500 ml-1">Admin</span>
             </div>
@@ -193,7 +201,9 @@ export default function Layout({ children }: LayoutProps) {
           </SheetContent>
         </Sheet>
         <div className="flex items-center gap-2 flex-1">
-          <Heart className="h-6 w-6 text-blue-600" />
+          <div className="w-6 h-6">
+            <AngelSenseLogo />
+          </div>
           <span className="text-lg font-bold text-gray-900">AngelSense Admin</span>
         </div>
         <UserMenu />

@@ -5,8 +5,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Heart, AlertCircle } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+
+const AngelSenseLogo = () => (
+  <svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50 10C35 10 25 25 25 40C25 55 35 70 50 70C65 70 75 55 75 40C75 25 65 10 50 10Z" fill="#4ECDC4"/>
+    <circle cx="50" cy="35" r="8" fill="white"/>
+    <path d="M42 45C42 45 46 50 50 50C54 50 58 45 58 45" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+    <path d="M30 75L50 85L70 75" stroke="#4ECDC4" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -40,7 +49,7 @@ export default function Login() {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="flex justify-center">
-            <Heart className="h-12 w-12 text-blue-600" />
+            <AngelSenseLogo />
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
             AngelSense Admin
