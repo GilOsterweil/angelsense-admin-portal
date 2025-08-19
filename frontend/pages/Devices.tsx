@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import backend from "~backend/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, MapPin, Battery, Calendar } from "lucide-react";
+import { useBackend } from "../hooks/useBackend";
 
 export default function Devices() {
   const [status, setStatus] = useState<string>("");
   const [page, setPage] = useState(1);
   const limit = 10;
+  
+  const backend = useBackend();
 
   const { data, isLoading } = useQuery({
     queryKey: ["devices", { status, page, limit }],

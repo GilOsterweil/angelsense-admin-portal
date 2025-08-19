@@ -32,7 +32,7 @@ export interface ListCustomersResponse {
 
 // Retrieves all customers with optional filtering and pagination.
 export const listCustomers = api<ListCustomersRequest, ListCustomersResponse>(
-  { expose: true, method: "GET", path: "/customers" },
+  { expose: true, method: "GET", path: "/customers", auth: true },
   async (req) => {
     const params = new URLSearchParams();
     if (req.page) params.append("page", req.page.toString());
@@ -61,7 +61,7 @@ export interface GetCustomerRequest {
 
 // Retrieves a specific customer by ID.
 export const getCustomer = api<GetCustomerRequest, Customer>(
-  { expose: true, method: "GET", path: "/customers/:id" },
+  { expose: true, method: "GET", path: "/customers/:id", auth: true },
   async (req) => {
     const response = await fetch(`${apiBaseUrl()}/customers/${req.id}`, {
       headers: {

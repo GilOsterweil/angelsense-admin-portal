@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import backend from "~backend/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Ticket, Smartphone, AlertTriangle } from "lucide-react";
+import { useBackend } from "../hooks/useBackend";
 
 export default function Dashboard() {
+  const backend = useBackend();
+
   const { data: customers } = useQuery({
     queryKey: ["customers", { limit: 1 }],
     queryFn: () => backend.proxy.listCustomers({ limit: 1 }),

@@ -1,14 +1,15 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import backend from "~backend/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Mail, Phone, Calendar, Activity } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useBackend } from "../hooks/useBackend";
 
 export default function CustomerDetail() {
   const { id } = useParams<{ id: string }>();
+  const backend = useBackend();
 
   const { data: customer, isLoading } = useQuery({
     queryKey: ["customer", id],

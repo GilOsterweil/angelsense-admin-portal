@@ -37,7 +37,7 @@ export interface ListDevicesResponse {
 
 // Retrieves all devices with optional filtering and pagination.
 export const listDevices = api<ListDevicesRequest, ListDevicesResponse>(
-  { expose: true, method: "GET", path: "/devices" },
+  { expose: true, method: "GET", path: "/devices", auth: true },
   async (req) => {
     const params = new URLSearchParams();
     if (req.customerId) params.append("customerId", req.customerId);
@@ -66,7 +66,7 @@ export interface GetDeviceRequest {
 
 // Retrieves a specific device by ID.
 export const getDevice = api<GetDeviceRequest, Device>(
-  { expose: true, method: "GET", path: "/devices/:id" },
+  { expose: true, method: "GET", path: "/devices/:id", auth: true },
   async (req) => {
     const response = await fetch(`${apiBaseUrl()}/devices/${req.id}`, {
       headers: {

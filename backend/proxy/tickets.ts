@@ -36,7 +36,7 @@ export interface ListTicketsResponse {
 
 // Retrieves all support tickets with optional filtering and pagination.
 export const listTickets = api<ListTicketsRequest, ListTicketsResponse>(
-  { expose: true, method: "GET", path: "/tickets" },
+  { expose: true, method: "GET", path: "/tickets", auth: true },
   async (req) => {
     const params = new URLSearchParams();
     if (req.page) params.append("page", req.page.toString());
@@ -67,7 +67,7 @@ export interface GetTicketRequest {
 
 // Retrieves a specific support ticket by ID.
 export const getTicket = api<GetTicketRequest, Ticket>(
-  { expose: true, method: "GET", path: "/tickets/:id" },
+  { expose: true, method: "GET", path: "/tickets/:id", auth: true },
   async (req) => {
     const response = await fetch(`${apiBaseUrl()}/tickets/${req.id}`, {
       headers: {
@@ -93,7 +93,7 @@ export interface UpdateTicketRequest {
 
 // Updates a support ticket.
 export const updateTicket = api<UpdateTicketRequest, Ticket>(
-  { expose: true, method: "PATCH", path: "/tickets/:id" },
+  { expose: true, method: "PATCH", path: "/tickets/:id", auth: true },
   async (req) => {
     const { id, ...updateData } = req;
     

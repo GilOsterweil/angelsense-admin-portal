@@ -33,6 +33,7 @@ const BROWSER = typeof globalThis === "object" && ("window" in globalThis);
  * Client is an API client for the  Encore application.
  */
 export class Client {
+    public readonly auth: auth.ServiceClient
     public readonly proxy: proxy.ServiceClient
     private readonly options: ClientOptions
     private readonly target: string
@@ -48,6 +49,7 @@ export class Client {
         this.target = target
         this.options = options ?? {}
         const base = new BaseClient(this.target, this.options)
+        this.auth = new auth.ServiceClient(base)
         this.proxy = new proxy.ServiceClient(base)
     }
 
@@ -77,6 +79,54 @@ export interface ClientOptions {
 
     /** Default RequestInit to be used for the client */
     requestInit?: Omit<RequestInit, "headers"> & { headers?: Record<string, string> }
+}
+
+/**
+ * Import the endpoint handlers to derive the types for the client.
+ */
+import { login as api_auth_login_login } from "~backend/auth/login";
+import { logout as api_auth_logout_logout } from "~backend/auth/logout";
+import { me as api_auth_me_me } from "~backend/auth/me";
+
+export namespace auth {
+
+    export class ServiceClient {
+        private baseClient: BaseClient
+
+        constructor(baseClient: BaseClient) {
+            this.baseClient = baseClient
+            this.login = this.login.bind(this)
+            this.logout = this.logout.bind(this)
+            this.me = this.me.bind(this)
+        }
+
+        /**
+         * Authenticates a user and returns a session token.
+         */
+        public async login(params: RequestType<typeof api_auth_login_login>): Promise<ResponseType<typeof api_auth_login_login>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/login`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_login_login>
+        }
+
+        /**
+         * Logs out the current user by clearing the session.
+         */
+        public async logout(): Promise<ResponseType<typeof api_auth_logout_logout>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/logout`, {method: "POST", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_logout_logout>
+        }
+
+        /**
+         * Retrieves the current user's information.
+         */
+        public async me(): Promise<ResponseType<typeof api_auth_me_me>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/me`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_me_me>
+        }
+    }
 }
 
 /**

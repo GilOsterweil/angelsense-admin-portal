@@ -1,19 +1,21 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import backend from "~backend/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Eye } from "lucide-react";
+import { useBackend } from "../hooks/useBackend";
 
 export default function Customers() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<string>("");
   const [page, setPage] = useState(1);
   const limit = 10;
+  
+  const backend = useBackend();
 
   const { data, isLoading } = useQuery({
     queryKey: ["customers", { search, status, page, limit }],
