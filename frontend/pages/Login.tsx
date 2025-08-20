@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import backend from "~backend/client";
 
 const AngelSenseLogo = () => (
   <svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -16,6 +18,39 @@ const AngelSenseLogo = () => (
     <path d="M30 75L50 85L70 75" stroke="#4ECDC4" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
+
+const HealthIndicator = () => {
+  const { data: healthStatus, isLoading } = useQuery({
+    queryKey: ["health"],
+    queryFn: () => backend.proxy.checkHealth(),
+    refetchInterval: 30000, // Check every 30 seconds
+    retry: false,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center gap-2 text-sm text-gray-500">
+        <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+        <span>Checking backend status...</span>
+      </div>
+    );
+  }
+
+  const isOnline = healthStatus?.status === "online";
+
+  return (
+    <div className="flex items-center gap-2 text-sm">
+      <div 
+        className={`w-2 h-2 rounded-full ${
+          isOnline ? "bg-green-500" : "bg-red-500"
+        }`}
+      ></div>
+      <span className={isOnline ? "text-green-600" : "text-red-600"}>
+        Backend {isOnline ? "Online" : "Offline"}
+      </span>
+    </div>
+  );
+};
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -57,6 +92,9 @@ export default function Login() {
           <p className="mt-2 text-sm text-gray-600">
             Sign in to your admin account
           </p>
+          <div className="mt-4 flex justify-center">
+            <HealthIndicator />
+          </div>
         </div>
 
         <Card>

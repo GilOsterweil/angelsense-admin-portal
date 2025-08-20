@@ -140,6 +140,7 @@ import {
     getDevice as api_proxy_devices_getDevice,
     listDevices as api_proxy_devices_listDevices
 } from "~backend/proxy/devices";
+import { checkHealth as api_proxy_health_checkHealth } from "~backend/proxy/health";
 import {
     getTicket as api_proxy_tickets_getTicket,
     listTickets as api_proxy_tickets_listTickets,
@@ -153,6 +154,7 @@ export namespace proxy {
 
         constructor(baseClient: BaseClient) {
             this.baseClient = baseClient
+            this.checkHealth = this.checkHealth.bind(this)
             this.getCustomer = this.getCustomer.bind(this)
             this.getDevice = this.getDevice.bind(this)
             this.getTicket = this.getTicket.bind(this)
@@ -160,6 +162,15 @@ export namespace proxy {
             this.listDevices = this.listDevices.bind(this)
             this.listTickets = this.listTickets.bind(this)
             this.updateTicket = this.updateTicket.bind(this)
+        }
+
+        /**
+         * Checks the health status of the AngelSense API backend.
+         */
+        public async checkHealth(): Promise<ResponseType<typeof api_proxy_health_checkHealth>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/health`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_proxy_health_checkHealth>
         }
 
         /**
