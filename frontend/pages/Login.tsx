@@ -59,16 +59,27 @@ interface QuoteData {
   source: string;
 }
 
-const FloatingQuote = ({ quote, delay, side }: { quote: QuoteData; delay: number; side: 'left' | 'right' }) => {
+interface ActiveQuote {
+  id: number;
+  startTime: number;
+  quoteIndex: number;
+  side: 'left' | 'right';
+}
+
+const FloatingQuote = ({ quote, side, onComplete }: { quote: QuoteData; side: 'left' | 'right'; onComplete: () => void }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Start the animation immediately
+    setIsVisible(true);
+
+    // Remove the quote after animation completes (20 seconds)
     const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, delay);
+      onComplete();
+    }, 20000);
 
     return () => clearTimeout(timer);
-  }, [delay]);
+  }, [onComplete]);
 
   const sidePosition = side === 'left' ? 'left-4' : 'right-4';
 
@@ -78,9 +89,9 @@ const FloatingQuote = ({ quote, delay, side }: { quote: QuoteData; delay: number
         isVisible ? 'animate-float opacity-100' : 'opacity-0 translate-y-10'
       }`}
       style={{
-        animationDelay: `${delay}ms`,
         animationDuration: '20s',
-        animationIterationCount: 'infinite',
+        animationIterationCount: '1',
+        animationFillMode: 'forwards',
       }}
     >
       <p className="text-sm text-gray-700 italic mb-3">"{quote.text}"</p>
@@ -94,7 +105,8 @@ const FloatingQuote = ({ quote, delay, side }: { quote: QuoteData; delay: number
 };
 
 const FloatingQuotes = () => {
-  const [activeQuotes, setActiveQuotes] = useState<number[]>([]);
+  const [activeQuotes, setActiveQuotes] = useState<ActiveQuote[]>([]);
+  const [nextQuoteIndex, setNextQuoteIndex] = useState(0);
 
   const quotes: QuoteData[] = [
     {
@@ -171,24 +183,32 @@ const FloatingQuotes = () => {
     }
   ];
 
+  const removeQuote = (id: number) => {
+    setActiveQuotes(prev => prev.filter(quote => quote.id !== id));
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveQuotes(prev => {
-        // Remove quotes that have been active for more than 20 seconds
-        const now = Date.now();
-        const filtered = prev.filter(startTime => now - startTime < 20000);
-        
-        // Add a new quote if we have less than 4 active
-        if (filtered.length < 4) {
-          return [...filtered, now];
+        // Only add a new quote if we have less than 4 active quotes
+        if (prev.length < 4) {
+          const newQuote: ActiveQuote = {
+            id: Date.now(),
+            startTime: Date.now(),
+            quoteIndex: nextQuoteIndex,
+            side: prev.length % 2 === 0 ? 'left' : 'right'
+          };
+          
+          setNextQuoteIndex((nextQuoteIndex + 1) % quotes.length);
+          return [...prev, newQuote];
         }
         
-        return filtered;
+        return prev;
       });
-    }, 5000); // Add new quote every 5 seconds
+    }, 5000); // Try to add new quote every 5 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [nextQuoteIndex, quotes.length]);
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -210,22 +230,17 @@ const FloatingQuotes = () => {
           }
         }
         .animate-float {
-          animation: float 20s linear infinite;
+          animation: float 20s linear forwards;
         }
       `}</style>
-      {activeQuotes.map((startTime, index) => {
-        const quoteIndex = Math.floor((startTime / 5000) % quotes.length);
-        const side = index % 2 === 0 ? 'left' : 'right';
-        
-        return (
-          <FloatingQuote
-            key={startTime}
-            quote={quotes[quoteIndex]}
-            delay={0}
-            side={side}
-          />
-        );
-      })}
+      {activeQuotes.map((activeQuote) => (
+        <FloatingQuote
+          key={activeQuote.id}
+          quote={quotes[activeQuote.quoteIndex]}
+          side={activeQuote.side}
+          onComplete={() => removeQuote(activeQuote.id)}
+        />
+      ))}
     </div>
   );
 };
