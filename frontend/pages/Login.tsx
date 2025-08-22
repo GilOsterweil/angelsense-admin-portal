@@ -52,6 +52,84 @@ const HealthIndicator = () => {
   );
 };
 
+const FloatingQuote = ({ quote, delay }: { quote: string; delay: number }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  return (
+    <div
+      className={`absolute bg-white/80 backdrop-blur-sm rounded-lg p-3 shadow-lg max-w-xs transition-all duration-1000 ${
+        isVisible ? 'animate-float opacity-100' : 'opacity-0 translate-y-10'
+      }`}
+      style={{
+        left: `${Math.random() * 70 + 10}%`,
+        animationDelay: `${delay}ms`,
+        animationDuration: '15s',
+        animationIterationCount: 'infinite',
+      }}
+    >
+      <p className="text-sm text-gray-700 italic">"{quote}"</p>
+    </div>
+  );
+};
+
+const FloatingQuotes = () => {
+  const quotes = [
+    "AngelSense has given me peace of mind knowing exactly where my child is at all times.",
+    "The GPS tracking is incredibly accurate and the alerts are so helpful.",
+    "Finally, a device that my child actually wants to wear every day.",
+    "The two-way voice feature has been a game-changer for our family.",
+    "I can focus on work knowing I'll be notified if anything unusual happens.",
+    "The battery life is amazing - it lasts all day without any issues.",
+    "Setting up safe zones was so easy and the notifications work perfectly.",
+    "The customer support team is incredibly responsive and helpful.",
+    "This device has transformed how we handle my child's independence.",
+    "The app is intuitive and gives me all the information I need.",
+    "AngelSense understands the unique needs of special needs families.",
+    "The speed alerts help me know when my teen is driving safely.",
+  ];
+
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      <style jsx>{`
+        @keyframes float {
+          0% {
+            transform: translateY(100vh) translateX(0);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-100px) translateX(20px);
+            opacity: 0;
+          }
+        }
+        .animate-float {
+          animation: float 15s linear infinite;
+        }
+      `}</style>
+      {quotes.map((quote, index) => (
+        <FloatingQuote
+          key={index}
+          quote={quote}
+          delay={index * 2000 + Math.random() * 1000}
+        />
+      ))}
+    </div>
+  );
+};
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -80,8 +158,10 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-teal-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <FloatingQuotes />
+      
+      <div className="max-w-md w-full space-y-8 relative z-10">
         <div className="text-center">
           <div className="flex justify-center">
             <AngelSenseLogo />
@@ -97,7 +177,7 @@ export default function Login() {
           </div>
         </div>
 
-        <Card>
+        <Card className="backdrop-blur-sm bg-white/90">
           <CardHeader>
             <CardTitle>Sign In</CardTitle>
             <CardDescription>
